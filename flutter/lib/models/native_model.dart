@@ -32,7 +32,7 @@ class PlatformFFI {
   // _homeDir is only needed for Android and IOS.
   String _homeDir = '';
   final _eventHandlers = <String, Map<String, HandleEvent>>{};
-  late RaksadeskImpl _ffiBind;
+  late InfomasterImpl _ffiBind;
   late String _appType;
   StreamEventHandler? _eventCallback;
 
@@ -41,7 +41,7 @@ class PlatformFFI {
   static final PlatformFFI instance = PlatformFFI._();
   final _toAndroidChannel = const MethodChannel('mChannel');
 
-  RaksadeskImpl get ffiBind => _ffiBind;
+  InfomasterImpl get ffiBind => _ffiBind;
   F3? _session_get_rgba;
 
   static get localeName => Platform.localeName;
@@ -129,7 +129,7 @@ class PlatformFFI {
       } catch (e) {
         debugPrint('Failed to get documents directory: $e');
       }
-      _ffiBind = RaksadeskImpl(dylib);
+      _ffiBind = InfomasterImpl(dylib);
 
       if (isLinux) {
         // Start a dbus service, no need to await
@@ -225,7 +225,7 @@ class PlatformFFI {
   }
 
   /// Start listening to the Rust core's events and frames.
-  void _startListenEvent(RaksadeskImpl infomasterImpl) {
+  void _startListenEvent(InfomasterImpl infomasterImpl) {
     final appType =
         _appType == kAppTypeDesktopRemote ? '$_appType,$kWindowId' : _appType;
     var sink = infomasterImpl.startGlobalEventStream(appType: appType);
